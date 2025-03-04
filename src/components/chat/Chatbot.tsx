@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Bot, X } from "lucide-react";
@@ -35,8 +36,16 @@ const createChatbotResponse = (query: string): Promise<string> => {
         response = "To drive more efficiently, use regenerative braking when possible, maintain a steady speed, and pre-condition your vehicle while it's still plugged in.";
       } else if (query_lower.includes("carbon") || query_lower.includes("footprint")) {
         response = "This month, you've saved approximately 180 kg of CO2 emissions compared to a gas vehicle. That's equivalent to planting 8 trees!";
+      } else if (query_lower.includes("traffic") || query_lower.includes("congestion")) {
+        response = "Current traffic congestion is at 65%. I've identified an alternate route that will save you approximately 12 minutes. Would you like me to navigate you through this route?";
+      } else if (query_lower.includes("accident") || query_lower.includes("risk")) {
+        response = "Based on current traffic patterns and road conditions, accident risk is currently at 30%. There's a high-risk area at Downtown Intersection 3.5 miles ahead. I recommend slowing down when approaching that area.";
+      } else if (query_lower.includes("heart") || query_lower.includes("health") || query_lower.includes("pulse")) {
+        response = "Your heart rate pattern is currently normal. The continuous heart monitoring system is active and will alert you if any anomalies are detected.";
+      } else if (query_lower.includes("vehicle") && (query_lower.includes("nearby") || query_lower.includes("proximity"))) {
+        response = "Vehicle proximity detection is active. There are currently no vehicles in your immediate surroundings. You will receive alerts when vehicles approach within your set threshold distance.";
       } else if (query_lower.includes("hello") || query_lower.includes("hi") || query_lower.includes("hey")) {
-        response = "Hello! I'm your EV Assistant. How can I help you today?";
+        response = "Hello! I'm your STAPS AI Assistant with enhanced safety features. I can help with traffic optimization, accident prevention, battery health, and heart monitoring. How can I assist you today?";
       }
 
       resolve(response);
@@ -50,7 +59,7 @@ const Chatbot = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
-      text: "Hi there! I'm your EV Assistant. Ask me anything about your electric vehicle.",
+      text: "Hi there! I'm your STAPS AI Assistant with advanced safety features. Ask me about traffic flow, accident prevention, battery health, or heart monitoring.",
       isBot: true,
       timestamp: new Date(),
     },
@@ -105,6 +114,7 @@ const Chatbot = () => {
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.8, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 25 }}
             className="relative"
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
@@ -113,20 +123,20 @@ const Chatbot = () => {
               onClick={() => setIsExpanded(true)}
               size="icon"
               className={cn(
-                "h-14 w-14 rounded-full shadow-lg bg-primary text-primary-foreground",
+                "h-14 w-14 rounded-full shadow-lg bg-primary text-primary-foreground neon-glow",
                 isHovering && "scale-110"
               )}
             >
-              <Bot size={24} />
+              <Bot size={24} className="animate-pulse" />
             </Button>
             {isHovering && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
-                className="absolute bottom-16 right-0 bg-popover text-popover-foreground py-2 px-4 rounded-lg shadow-md whitespace-nowrap"
+                className="absolute bottom-16 right-0 bg-popover text-popover-foreground py-2 px-4 rounded-lg shadow-md whitespace-nowrap glossy"
               >
-                EV Assistant
+                STAPS AI Assistant
               </motion.div>
             )}
           </motion.div>
@@ -135,21 +145,22 @@ const Chatbot = () => {
             initial={{ width: 60, height: 60, borderRadius: 30, opacity: 0 }}
             animate={{ width: 360, height: 480, borderRadius: 12, opacity: 1 }}
             exit={{ width: 60, height: 60, borderRadius: 30, opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            className="glossy"
           >
-            <Card className="w-full h-full flex flex-col overflow-hidden shadow-lg border">
+            <Card className="w-full h-full flex flex-col overflow-hidden shadow-lg border glass-panel">
               <div className="flex items-center justify-between p-4 border-b bg-primary/5">
                 <div className="flex items-center gap-2">
                   <Avatar className="h-8 w-8 bg-primary/20 flex items-center justify-center text-primary">
                     <Bot className="h-4 w-4" />
                   </Avatar>
-                  <h3 className="font-medium">EV Assistant</h3>
+                  <h3 className="font-medium gradient-text">STAPS AI Assistant</h3>
                 </div>
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={() => setIsExpanded(false)}
-                  className="h-8 w-8 rounded-full"
+                  className="h-8 w-8 rounded-full hover:bg-primary/10 liquid-button-effect"
                 >
                   <X className="h-4 w-4" />
                 </Button>
